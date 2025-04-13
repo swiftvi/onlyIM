@@ -1,0 +1,81 @@
+syntax = "v1"
+
+info (
+	title:  "User Service http api"
+	author: "ll"
+)
+
+type User {
+	Id       string `json:"id"`
+	Phone    string `json:"phone"`
+	Nickname string `json:"nickname"`
+	Gender   byte   `json:"gender"`
+	Avatar   string `json:"avatar"`
+}
+
+type (
+	RegisterReq {
+		Phone    string `json:"phone"`
+		Password string `json:"password"`
+		Nickname string `json:"nickname"`
+		Gender   byte   `json:"gender"`
+		Avatar   string `json:"avatar"`
+	}
+	RegisterResp {
+		Token  string `json:"token"`
+		Expire int64  `json:"expire"`
+	}
+)
+
+type (
+	LoginReq {
+		Phone    string `json:"phone"`
+		Password string `json:"password"`
+	}
+	LoginResp {
+		Token  string `json:"token"`
+		Expire int64  `json:"expire"`
+	}
+)
+
+type (
+	UserInfoReq  {}
+	UserInfoResp {
+		Info User `json:"info"`
+	}
+)
+
+@server (
+	prefix: v1/user
+	group:  user
+)
+service user {
+	@doc (
+		summary:     "用户注册"
+		description: "用户注册"
+	)
+	@handler register
+	post /register (RegisterReq) returns (RegisterResp)
+
+	@doc (
+		summary:     "用户登录"
+		description: "用户登录"
+	)
+	@handler login
+	post /login (LoginReq) returns (LoginResp)
+}
+
+@server (
+	prefix: v1/user
+	group:  user
+	jwt:    JWT
+)
+service user {
+	@doc (
+		summary:     "获取用户信息"
+		description: "获取用户信息"
+	)
+	@handler info
+	get /info (UserInfoReq) returns (UserInfoResp)
+}
+

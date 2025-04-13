@@ -1,0 +1,12 @@
+Name: user
+Host: 0.0.0.0
+Port: 8888
+
+JWT:
+  AccessSecret: "12345678"
+
+UserRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:23790
+    Key: user.rpc
